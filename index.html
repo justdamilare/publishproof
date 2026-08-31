@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Local-first AI campaign evidence records for marketing agencies.">
+  <meta property="og:title" content="PublishProof — Proof before publish">
+  <meta property="og:description" content="AI campaign evidence for agencies.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PublishProof — Proof before publish">
+  <meta name="twitter:description" content="AI campaign evidence for agencies.">
+  <meta name="twitter:image" content="og.png">
+  <title>PublishProof — Proof before publish</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="PublishProof home"><span class="brand-mark">P</span><span>PublishProof</span></a>
+      <nav aria-label="Primary navigation"><a href="#how">How it works</a><a href="#workspace">Workspace</a><a href="article50-agency-checklist.html">Agency checklist</a><a href="#pricing">Pricing</a></nav>
+      <a class="button button-small" href="#workspace">Open workspace</a>
+    </header>
+
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> Local-first evidence for AI-assisted campaigns</p>
+        <h1>Proof before<br><em>publish.</em></h1>
+        <p class="hero-lede">Record what AI changed, who reviewed it, and why you chose to label it—then hand your client a clean evidence pack.</p>
+        <div class="hero-actions"><a class="button" href="#workspace">Create a publication record</a><a class="text-link" href="#how">See the workflow <span>↘</span></a></div>
+        <div class="trust-row"><span>No account</span><span>No uploads</span><span>Works in your browser</span></div>
+      </div>
+      <div class="hero-panel" aria-label="Example campaign evidence record">
+        <div class="panel-top"><div><span class="live-dot"></span> Ready for review</div><span>PP–024</span></div>
+        <div class="asset-preview"><div class="asset-grid"></div><span class="asset-label">SUMMER CAMPAIGN / 06</span><div class="asset-title">A clearer trail<br>from prompt to post.</div></div>
+        <div class="record-meta"><div><span>AI contribution</span><strong>Image generated</strong></div><div><span>Human review</span><strong class="verified">Completed</strong></div><div><span>Disclosure</span><strong>Label recommended</strong></div><div><span>File fingerprint</span><strong class="mono">9f7a…c21d</strong></div></div>
+        <button class="report-button" type="button" data-scroll-workspace>Build your evidence pack <span>↘</span></button>
+      </div>
+    </section>
+
+    <section class="signal-strip" aria-label="Product benefits"><div><strong>01</strong><span>Capture the facts</span></div><div><strong>02</strong><span>Check the disclosure path</span></div><div><strong>03</strong><span>Export client-ready proof</span></div></section>
+
+    <section class="problem-section" id="how">
+      <div class="section-kicker">The missing layer</div>
+      <div class="problem-copy">
+        <h2>Your tools make the asset.<br>Your team still owns the decision.</h2>
+        <p>PublishProof creates a lightweight record between generation and publication: the AI contribution, source file fingerprint, human review, disclosure reasoning, and final approval.</p>
+      </div>
+      <div class="flow" aria-label="PublishProof workflow">
+        <article><span>1</span><h3>Capture</h3><p>Add the campaign facts and fingerprint the final file without uploading it.</p></article>
+        <article><span>2</span><h3>Check</h3><p>Follow a conservative, source-linked Article 50 decision path.</p></article>
+        <article><span>3</span><h3>Approve</h3><p>Name the reviewer, record the label decision, and preserve the rationale.</p></article>
+        <article><span>4</span><h3>Prove</h3><p>Export a portable record for the client, audit file, or future handoff.</p></article>
+      </div>
+    </section>
+
+    <section class="workspace-section" id="workspace">
+      <div class="workspace-heading">
+        <div><p class="eyebrow"><span></span> Private workspace</p><h2>Campaign evidence,<br>kept close.</h2></div>
+        <div class="privacy-note"><strong>Local by default</strong><p>Records and file fingerprints stay in this browser. Files are hashed on your device and are never uploaded.</p></div>
+      </div>
+
+      <div class="app-shell">
+        <aside class="app-sidebar">
+          <div class="app-identity"><span class="brand-mark">P</span><div><strong>PublishProof</strong><small>Private workspace</small></div></div>
+          <button class="side-action active" type="button" data-view="records"><span>▦</span> Records <b id="recordCount">0</b></button>
+          <button class="side-action" type="button" data-view="new"><span>＋</span> New record</button>
+          <div class="side-spacer"></div>
+          <button class="side-action" id="exportJson" type="button"><span>↓</span> Backup JSON</button>
+          <button class="side-action" id="exportCsv" type="button"><span>↓</span> Export CSV</button>
+          <div class="local-status"><span></span><div><strong>Device storage</strong><small>Nothing sent to a server</small></div></div>
+        </aside>
+
+        <div class="app-content">
+          <section class="app-view active" id="recordsView" aria-labelledby="recordsTitle">
+            <div class="view-header"><div><p class="view-kicker">Workspace / records</p><h3 id="recordsTitle">Publication records</h3></div><button class="button button-small" id="newRecordTop" type="button">＋ New record</button></div>
+            <div class="metric-row"><div><span>Total records</span><strong id="metricTotal">0</strong></div><div><span>Review complete</span><strong id="metricReviewed">0</strong></div><div><span>Labels recorded</span><strong id="metricLabels">0</strong></div></div>
+            <div class="records-toolbar"><label><span class="sr-only">Search records</span><input id="recordSearch" type="search" placeholder="Search client, campaign, or channel"></label><button class="quiet-button" id="loadSample" type="button">Load sample</button></div>
+            <div class="records-list" id="recordsList"></div>
+            <div class="empty-state" id="emptyState"><div class="empty-mark">P</div><h4>No publication records yet.</h4><p>Create the first one in about three minutes. You can also load a sample to see the finished evidence pack.</p><button class="button" id="emptyCreate" type="button">Create your first record</button></div>
+          </section>
+
+          <section class="app-view" id="newView" aria-labelledby="newTitle">
+            <div class="view-header"><div><p class="view-kicker">Workspace / new record</p><h3 id="newTitle">Document a publication</h3></div><button class="quiet-button" id="cancelRecord" type="button">Cancel</button></div>
+            <form id="recordForm">
+              <div class="form-progress" aria-label="Form sections"><span class="current">1 Campaign</span><span>2 AI contribution</span><span>3 Review &amp; disclosure</span></div>
+              <fieldset><legend><span>01</span> Campaign facts</legend><p class="field-note">Identify the final asset and where it is expected to appear.</p>
+                <div class="field-grid two"><label>Client or brand<input name="client" required placeholder="Northstar Coffee"></label><label>Campaign<input name="campaign" required placeholder="Autumn product launch"></label></div>
+                <div class="field-grid two"><label>Asset title<input name="title" required placeholder="Launch film — 30s cut"></label><label>Channel<select name="channel" required><option value="">Choose channel</option><option>Website</option><option>LinkedIn</option><option>Instagram</option><option>TikTok</option><option>YouTube</option><option>Podcast</option><option>Email</option><option>Print / OOH</option><option>Other</option></select></label></div>
+                <div class="field-grid two"><label>Planned publication date<input name="publicationDate" type="date"></label><label>Public URL or placement<input name="publicationUrl" type="url" placeholder="https://…"></label></div>
+                <label class="file-drop">Final file for fingerprinting<input id="assetFile" type="file"><span id="fileLabel"><b>Select a file</b> or drop it here. Only a SHA-256 fingerprint is retained.</span></label>
+              </fieldset>
+
+              <fieldset><legend><span>02</span> AI contribution</legend><p class="field-note">Describe what the AI system actually did. When uncertain, choose the more substantial option.</p>
+                <div class="field-grid two"><label>Content type<select name="contentType" required><option value="">Choose type</option><option value="text">Text</option><option value="image">Image</option><option value="video">Video</option><option value="audio">Audio</option><option value="interactive">Interactive AI / chatbot</option><option value="mixed">Mixed media</option></select></label><label>AI contribution<select name="aiUse" required><option value="">Choose contribution</option><option value="none">No AI used</option><option value="assistive">Assistive edit only</option><option value="generated">Generated substantive content</option><option value="manipulated">Manipulated existing content</option></select></label></div>
+                <div class="field-grid two"><label>AI system or vendor<input name="aiTool" placeholder="e.g. Adobe Firefly, Midjourney"></label><label>Model / version, if known<input name="aiVersion" placeholder="e.g. Firefly Image 4"></label></div>
+                <div class="question-stack">
+                  <label class="check-card"><input name="realistic" type="checkbox"><span><b>Realistic resemblance</b><small>The image, audio, or video resembles a person, object, place, entity, or event that exists or could plausibly exist.</small></span></label>
+                  <label class="check-card"><input name="couldMislead" type="checkbox"><span><b>Could appear authentic or truthful</b><small>A foreseeable viewer could mistake the content for a real representation.</small></span></label>
+                  <label class="check-card"><input name="publicInterest" type="checkbox"><span><b>Public-interest text</b><small>The text is published to inform the public about a matter of public interest.</small></span></label>
+                </div>
+              </fieldset>
+
+              <fieldset><legend><span>03</span> Review &amp; disclosure</legend><p class="field-note">Record the actual control, not the intended control.</p>
+                <div class="question-stack">
+                  <label class="check-card"><input name="humanReviewed" type="checkbox"><span><b>Human review completed</b><small>A person reviewed the final output before publication.</small></span></label>
+                  <label class="check-card"><input name="editorialResponsibility" type="checkbox"><span><b>Editorial responsibility assigned</b><small>A named person or organisation controls and takes responsibility for the publication.</small></span></label>
+                  <label class="check-card"><input name="machineMark" type="checkbox"><span><b>Provider marking retained</b><small>The provider’s machine-readable marking or content credential is present, if supplied.</small></span></label>
+                  <label class="check-card"><input name="visibleLabel" type="checkbox"><span><b>Visible or audible disclosure added</b><small>The audience can perceive the AI-origin disclosure at first exposure.</small></span></label>
+                </div>
+                <div class="field-grid two"><label>Reviewer<input name="reviewer" placeholder="Name or role"></label><label>Review date<input name="reviewDate" type="date"></label></div>
+                <div class="decision-card" id="decisionCard" aria-live="polite"><p class="view-kicker">Working assessment</p><strong id="decisionTitle">Complete the AI contribution fields</strong><p id="decisionText">PublishProof will show a conservative workflow recommendation here.</p></div>
+                <div class="field-grid two"><label>Disclosure wording<textarea name="labelText" rows="3" placeholder="This content was generated or manipulated using AI."></textarea></label><label>Placement or timing<textarea name="labelPlacement" rows="3" placeholder="Visible beside the asset at first exposure"></textarea></label></div>
+                <div class="field-grid two"><label>Evidence link<input name="evidenceLink" type="url" placeholder="Review ticket, source folder, or approval link"></label><label>Internal owner<input name="owner" placeholder="Account lead or compliance owner"></label></div>
+                <label>Notes and rationale<textarea name="notes" rows="4" placeholder="What was checked, what changed, and why this disclosure decision was made."></textarea></label>
+              </fieldset>
+              <div class="form-footer"><p>This workflow aid does not determine legal compliance or replace professional advice.</p><button class="button" type="submit">Save publication record</button></div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="source-section">
+      <div><p class="eyebrow"><span></span> Source-linked, deliberately conservative</p><h2>Built around the official guidance—not a fear-based compliance score.</h2></div>
+      <div class="source-copy"><p>The recommendation engine separates interactive AI disclosure, potential deep-fake labelling, public-interest text, provider markings, and human review. It records your facts and points to the source; it does not promise compliance.</p><a class="text-link" href="article50-agency-checklist.html">Read the agency checklist <span>→</span></a><a class="text-link" href="https://digital-strategy.ec.europa.eu/en/library/guidelines-transparency-obligations-providers-and-deployers-ai-systems" target="_blank" rel="noreferrer">European Commission Article 50 guidelines <span>↗</span></a><a class="text-link" href="https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content" target="_blank" rel="noreferrer">Transparency Code of Practice <span>↗</span></a></div>
+    </section>
+
+    <section class="pricing-section" id="pricing">
+      <div><p class="eyebrow"><span></span> Founding offer</p><h2>Start free.<br>Keep proof portable.</h2><p>Validate the workflow before paying for another dashboard.</p></div>
+      <div class="price-card"><div class="price-top"><span>Founding agency</span><strong>€49 <small>one time</small></strong></div><ul><li>Unlimited publication records</li><li>File fingerprints and local backups</li><li>Client-ready evidence exports</li><li>12 months of regulatory workflow updates</li></ul><button class="button" type="button" data-scroll-workspace>Use the unlocked preview</button><small>Checkout opens after the founding validation cohort. No payment is collected in this preview.</small></div>
+    </section>
+
+    <footer><a class="brand" href="#top"><span class="brand-mark">P</span><span>PublishProof</span></a><p>Proof before publish. Built for agencies that want a record, not another black box.</p><div><a href="article50-agency-checklist.html">Agency checklist</a><a href="https://digital-strategy.ec.europa.eu/en/library/guidelines-transparency-obligations-providers-and-deployers-ai-systems" target="_blank" rel="noreferrer">Sources</a><span>Privacy: local browser storage</span><span>Not legal advice</span></div></footer>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
