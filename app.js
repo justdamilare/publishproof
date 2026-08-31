@@ -103,7 +103,6 @@
       };
       if (suggestions[decision.code]) form.elements.labelText.value = suggestions[decision.code];
     }
-    window.publishproofTranslate?.();
   }
 
   async function fingerprint(file) {
@@ -146,7 +145,6 @@
       </article>`;
     }).join('');
     if (records.length && !filtered.length) recordsList.innerHTML = '<div class="empty-state"><h4>No matching records.</h4><p>Try a different client, campaign, or channel.</p></div>';
-    window.publishproofTranslate?.();
   }
 
   function download(name, contents, type) {
