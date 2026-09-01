@@ -14,6 +14,7 @@
   <meta name="twitter:image" content="og.png">
   <title>PublishProof — Proof before publish</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="license.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -69,7 +70,10 @@
           <button class="side-action" type="button" data-view="new"><span>＋</span> New record</button>
           <div class="side-spacer"></div>
           <button class="side-action" id="exportJson" type="button"><span>↓</span> Backup JSON</button>
+          <button class="side-action" id="importJson" type="button"><span>↑</span> Restore backup</button>
+          <input id="importFile" class="sr-only" type="file" accept="application/json,.json">
           <button class="side-action" id="exportCsv" type="button"><span>↓</span> Export CSV</button>
+          <button class="side-action licence-action" type="button" data-view="license"><span>◇</span> <span id="licenceNavText">Activate licence</span></button>
           <div class="local-status"><span></span><div><strong>Device storage</strong><small>Nothing sent to a server</small></div></div>
         </aside>
 
@@ -116,8 +120,36 @@
                 <div class="field-grid two"><label>Evidence link<input name="evidenceLink" type="url" placeholder="Review ticket, source folder, or approval link"></label><label>Internal owner<input name="owner" placeholder="Account lead or compliance owner"></label></div>
                 <label>Notes and rationale<textarea name="notes" rows="4" placeholder="What was checked, what changed, and why this disclosure decision was made."></textarea></label>
               </fieldset>
-              <div class="form-footer"><p>This workflow aid does not determine legal compliance or replace professional advice.</p><button class="button" type="submit">Save publication record</button></div>
+              <div class="form-footer"><p><span id="usageNote">Your first publication record is free.</span> This workflow aid does not determine legal compliance or replace professional advice.</p><button class="button" type="submit">Save publication record</button></div>
             </form>
+          </section>
+
+          <section class="app-view" id="licenseView" aria-labelledby="licenseTitle">
+            <div class="view-header"><div><p class="view-kicker">Workspace / licence</p><h3 id="licenseTitle">Commercial licence</h3></div><span class="licence-pill" id="licencePill">Trial</span></div>
+            <div class="licence-layout">
+              <div class="licence-card">
+                <div id="licenceTrialState">
+                  <p class="eyebrow"><span></span> One record free</p>
+                  <h4>Unlock unlimited local records.</h4>
+                  <p>Purchase once, then activate the key from your receipt on up to five browsers or devices. No PublishProof account is created and your campaign records remain on this device.</p>
+                  <a class="button" href="https://srevana.lemonsqueezy.com/checkout/buy/58b35cc4-a553-4ae1-ad3f-5ced3058790f" target="_blank" rel="noopener">Buy agency licence — €49</a>
+                </div>
+                <div id="licenceActiveState" hidden>
+                  <p class="eyebrow"><span></span> Licence active</p>
+                  <h4>Unlimited records are unlocked.</h4>
+                  <p>This browser is activated with <strong id="maskedLicenceKey"></strong>. Export a JSON backup regularly so your local records remain recoverable.</p>
+                  <button class="quiet-button" id="deactivateLicence" type="button">Deactivate this browser</button>
+                </div>
+              </div>
+              <form class="activation-card" id="licenseForm">
+                <p class="view-kicker">Already purchased?</p>
+                <h4>Activate this browser</h4>
+                <label>Checkout email<input id="licenseEmail" name="email" type="email" autocomplete="email" required placeholder="you@agency.com"></label>
+                <label>Licence key<input id="licenseKey" name="key" autocomplete="off" required placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"></label>
+                <button class="button" id="activateLicence" type="submit">Activate licence</button>
+                <p class="activation-message" id="activationMessage" role="status" aria-live="polite">Your key is included in the Lemon Squeezy receipt and My Orders page.</p>
+              </form>
+            </div>
           </section>
         </div>
       </div>
@@ -129,11 +161,11 @@
     </section>
 
     <section class="pricing-section" id="pricing">
-      <div><p class="eyebrow"><span></span> Founding offer</p><h2>Start free.<br>Keep proof portable.</h2><p>Validate the workflow before paying for another dashboard.</p></div>
-      <div class="price-card"><div class="price-top"><span>Founding agency</span><strong>€49 <small>one time</small></strong></div><ul><li>Commercial agency licence</li><li>Unlimited publication records</li><li>File fingerprints and local backups</li><li>Client-ready evidence exports</li><li>12 months of workflow updates</li></ul><a class="button" href="https://srevana.lemonsqueezy.com/checkout/buy/58b35cc4-a553-4ae1-ad3f-5ced3058790f" target="_blank" rel="noopener">Get founding access — €49</a><small>Secure checkout and tax handling by Lemon Squeezy. Sold by Srevana.</small></div>
+      <div><p class="eyebrow"><span></span> Founding offer</p><h2>Try one record.<br>Licence the workflow.</h2><p>No account or card is needed for the first record. Commercial agency use and unlimited records require a licence.</p></div>
+      <div class="price-card"><div class="price-top"><span>Founding agency</span><strong>€49 <small>one time</small></strong></div><ul><li>Perpetual commercial agency licence</li><li>Unlimited publication records</li><li>Activation on up to five browsers or devices</li><li>Backup restoration and client-ready exports</li><li>12 months of workflow updates</li></ul><a class="button" href="https://srevana.lemonsqueezy.com/checkout/buy/58b35cc4-a553-4ae1-ad3f-5ced3058790f" target="_blank" rel="noopener">Buy agency licence — €49</a><button class="text-button" type="button" data-view="license" data-scroll-license>Already purchased? Activate your key</button><small>Secure checkout and tax handling by Lemon Squeezy. Sold by Srevana. See the <a href="licence.html">commercial licence terms</a>.</small></div>
     </section>
 
-    <footer><a class="brand" href="#top"><span class="brand-mark">P</span><span>PublishProof</span></a><p>Proof before publish. Built for agencies that want a record, not another black box.</p><div><a href="article50-agency-checklist.html">Agency checklist</a><a href="https://digital-strategy.ec.europa.eu/en/library/guidelines-transparency-obligations-providers-and-deployers-ai-systems" target="_blank" rel="noreferrer">Sources</a><span>Privacy: local browser storage</span><span>Not legal advice</span></div></footer>
+    <footer><a class="brand" href="#top"><span class="brand-mark">P</span><span>PublishProof</span></a><p>Proof before publish. Built for agencies that want a record, not another black box.</p><div><a href="article50-agency-checklist.html">Agency checklist</a><a href="licence.html">Licence &amp; privacy</a><a href="https://digital-strategy.ec.europa.eu/en/library/guidelines-transparency-obligations-providers-and-deployers-ai-systems" target="_blank" rel="noreferrer">Sources</a><span>Not legal advice</span></div></footer>
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>

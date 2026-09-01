@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Activate PublishProof</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="license.js" defer></script>
+</head>
+<body>
+  <main class="article-main">
+    <header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">P</span><span>PublishProof</span></a><span></span><a class="button button-small" href="index.html#workspace">Open workspace</a></header>
+    <section class="article-hero"><p class="eyebrow"><span></span> Payment complete</p><h1>Welcome to<br><em>PublishProof.</em></h1><p class="article-deck">Activate this browser to unlock unlimited publication records. Your campaign data will continue to stay on this device.</p></section>
+    <section class="article-content"><aside class="article-toc"><strong>Your licence</strong><span>Perpetual agency use</span><span>Five activations</span><span>No account</span><span>Local records</span></aside><div class="article-copy">
+      <form class="activation-card" id="welcomeLicenseForm">
+        <p class="view-kicker">Activate this browser</p>
+        <label>Checkout email<input id="welcomeEmail" type="email" autocomplete="email" required></label>
+        <label>Licence key<input id="welcomeKey" autocomplete="off" required></label>
+        <button class="button" id="welcomeActivate" type="submit">Activate and open workspace</button>
+        <p class="activation-message" id="welcomeMessage" role="status" aria-live="polite">Your receipt remains the permanent copy of your order and licence key.</p>
+      </form>
+      <h2>What happens next</h2>
+      <ol><li>PublishProof verifies this key directly with Lemon Squeezy.</li><li>This browser becomes one of your five activations.</li><li>Unlimited records and backup restoration are unlocked locally.</li></ol>
+      <p>Moving to another device? Deactivate the old browser from the Licence screen first. Keep regular JSON backups because PublishProof never uploads campaign records.</p>
+    </div></section>
+  </main>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(location.search);
+      const email = params.get('email') || '';
+      const key = params.get('license_key') || '';
+      document.querySelector('#welcomeEmail').value = email;
+      document.querySelector('#welcomeKey').value = key;
+      if (location.search) history.replaceState({}, '', 'welcome.html');
+      document.querySelector('#welcomeLicenseForm').addEventListener('submit', async event => {
+        event.preventDefault();
+        const message = document.querySelector('#welcomeMessage');
+        const button = document.querySelector('#welcomeActivate');
+        message.className = 'activation-message'; message.textContent = 'Activating this browser…'; button.disabled = true;
+        try {
+          await PublishProofLicense.activate(document.querySelector('#welcomeKey').value, document.querySelector('#welcomeEmail').value);
+          message.classList.add('success'); message.textContent = 'Licence active. Opening your workspace…';
+          location.href = 'index.html#workspace';
+        } catch (error) {
+          message.classList.add('error'); message.textContent = error.message; button.disabled = false;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

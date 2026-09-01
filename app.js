@@ -13,6 +13,8 @@
   const fileInput = document.querySelector('#assetFile');
   const fileLabel = document.querySelector('#fileLabel');
   const searchInput = document.querySelector('#recordSearch');
+  const licenseApi = window.PublishProofLicense;
+  const TRIAL_KEY = 'publishproof.trialUsed.v1';
   let fileEvidence = null;
   let toastTimer;
 
@@ -51,10 +53,41 @@
 
   function showView(view) {
     const isNew = view === 'new';
-    recordsView.classList.toggle('active', !isNew);
+    const isLicense = view === 'license';
+    recordsView.classList.toggle('active', !isNew && !isLicense);
     newView.classList.toggle('active', isNew);
+    document.querySelector('#licenseView').classList.toggle('active', isLicense);
     document.querySelectorAll('[data-view]').forEach(button => button.classList.toggle('active', button.dataset.view === view));
     if (isNew) setTimeout(() => form.elements.client.focus(), 50);
+  }
+
+  function hasUsedTrial() {
+    return localStorage.getItem(TRIAL_KEY) === 'true' || loadRecords().some(record => record.id !== sampleRecord.id);
+  }
+
+  function canCreateRecord() {
+    return licenseApi.isLocallyLicensed() || !hasUsedTrial();
+  }
+
+  function startNewRecord() {
+    if (!canCreateRecord()) {
+      showView('license');
+      showToast('Activate an agency licence to create unlimited records.');
+      return;
+    }
+    showView('new');
+  }
+
+  function updateAccessUI() {
+    const licensed = licenseApi.isLocallyLicensed();
+    const trialUsed = hasUsedTrial();
+    document.querySelector('#licenceTrialState').hidden = licensed;
+    document.querySelector('#licenceActiveState').hidden = !licensed;
+    document.querySelector('#licenseForm').hidden = licensed;
+    document.querySelector('#licencePill').textContent = licensed ? 'Licensed' : trialUsed ? 'Trial used' : 'Trial';
+    document.querySelector('#licenceNavText').textContent = licensed ? 'Licence active' : 'Activate licence';
+    document.querySelector('#maskedLicenceKey').textContent = licensed ? licenseApi.maskedKey() : '';
+    document.querySelector('#usageNote').textContent = licensed ? 'Agency licence active — unlimited records.' : trialUsed ? 'Your free record has been used. Activate a licence to save another.' : 'Your first publication record is free.';
   }
 
   function formState() {
@@ -176,7 +209,11 @@
 
   document.querySelectorAll('[data-scroll-workspace]').forEach(button => button.addEventListener('click', () => document.querySelector('#workspace').scrollIntoView({ behavior: 'smooth' })));
   document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => showView(button.dataset.view)));
-  ['#newRecordTop', '#emptyCreate'].forEach(selector => document.querySelector(selector).addEventListener('click', () => showView('new')));
+  ['#newRecordTop', '#emptyCreate'].forEach(selector => document.querySelector(selector).addEventListener('click', startNewRecord));
+  document.querySelectorAll('[data-scroll-license]').forEach(button => button.addEventListener('click', () => {
+    document.querySelector('#workspace').scrollIntoView({ behavior: 'smooth' });
+    showView('license');
+  }));
   document.querySelector('#cancelRecord').addEventListener('click', () => showView('records'));
   searchInput.addEventListener('input', renderRecords);
   form.addEventListener('input', updateDecision);
@@ -197,13 +234,19 @@
 
   form.addEventListener('submit', async event => {
     event.preventDefault();
+    if (!canCreateRecord()) {
+      showView('license');
+      showToast('Activate an agency licence to save another record.');
+      return;
+    }
     const data = formState();
     const decision = assess(data);
     const record = { id: `PP-${Date.now().toString(36).toUpperCase()}`, createdAt: new Date().toISOString(), ...data, ...(fileEvidence || {}), decision };
     record.recordHash = await hashText(JSON.stringify(record));
     const records = loadRecords(); records.unshift(record); saveRecords(records);
+    if (!licenseApi.isLocallyLicensed()) localStorage.setItem(TRIAL_KEY, 'true');
     form.reset(); fileEvidence = null; fileLabel.innerHTML = '<b>Select a file</b> or drop it here. Only a SHA-256 fingerprint is retained.';
-    updateDecision(); renderRecords(); showView('records'); showToast('Publication record saved on this device.');
+    updateDecision(); renderRecords(); updateAccessUI(); showView('records'); showToast('Publication record saved on this device.');
   });
 
   recordsList.addEventListener('click', event => {
@@ -237,6 +280,62 @@
     download(`publishproof-records-${new Date().toISOString().slice(0,10)}.csv`, csv, 'text/csv;charset=utf-8');
   });
 
+  document.querySelector('#importJson').addEventListener('click', () => document.querySelector('#importFile').click());
+  document.querySelector('#importFile').addEventListener('change', async event => {
+    const file = event.target.files[0];
+    if (!file) return;
+    try {
+      const backup = JSON.parse(await file.text());
+      if (backup?.schema !== 1 || !Array.isArray(backup.records)) throw new Error('Choose a PublishProof JSON backup.');
+      if (!licenseApi.isLocallyLicensed() && backup.records.filter(record => record.id !== sampleRecord.id).length > 1) {
+        showView('license');
+        throw new Error('Activate your agency licence to restore a multi-record backup.');
+      }
+      const existing = loadRecords();
+      const merged = [...backup.records, ...existing].filter((record, index, records) => record?.id && records.findIndex(item => item.id === record.id) === index);
+      saveRecords(merged);
+      if (merged.some(record => record.id !== sampleRecord.id)) localStorage.setItem(TRIAL_KEY, 'true');
+      renderRecords(); updateAccessUI(); showToast(`${backup.records.length} backup record${backup.records.length === 1 ? '' : 's'} restored.`);
+    } catch (error) {
+      showToast(error.message || 'This backup could not be restored.');
+    } finally {
+      event.target.value = '';
+    }
+  });
+
+  document.querySelector('#licenseForm').addEventListener('submit', async event => {
+    event.preventDefault();
+    const button = document.querySelector('#activateLicence');
+    const message = document.querySelector('#activationMessage');
+    button.disabled = true; message.className = 'activation-message'; message.textContent = 'Activating this browser…';
+    try {
+      await licenseApi.activate(document.querySelector('#licenseKey').value, document.querySelector('#licenseEmail').value);
+      message.classList.add('success'); message.textContent = 'Licence active. Unlimited records are unlocked.';
+      updateAccessUI();
+      showToast('Agency licence activated.');
+    } catch (error) {
+      message.classList.add('error'); message.textContent = error.message;
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  document.querySelector('#deactivateLicence').addEventListener('click', async event => {
+    if (!window.confirm('Deactivate this browser? Your records will stay here, but new records may require another activation.')) return;
+    event.target.disabled = true;
+    try {
+      await licenseApi.deactivate();
+      updateAccessUI(); showToast('This browser has been deactivated.');
+    } catch (error) {
+      showToast(error.message || 'This browser could not be deactivated.');
+    } finally {
+      event.target.disabled = false;
+    }
+  });
+
   updateDecision();
   renderRecords();
+  updateAccessUI();
+  licenseApi.validate().then(() => updateAccessUI());
+  if (location.hash === '#activate') showView('license');
 })();
