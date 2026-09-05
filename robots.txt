@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /welcome.html
+Disallow: /de/willkommen.html
+
+Sitemap: https://www.getpublishproof.com/sitemap.xml

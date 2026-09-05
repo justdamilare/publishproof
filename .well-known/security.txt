@@ -1,0 +1,4 @@
+Contact: mailto:hello@getpublishproof.com
+Preferred-Languages: en, de
+Canonical: https://www.getpublishproof.com/.well-known/security.txt
+Expires: 2027-09-01T00:00:00Z
