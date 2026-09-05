@@ -99,7 +99,7 @@
     'Cloud sync is off. Records remain on this device.': 'Cloud-Synchronisierung ist aus. Datensätze bleiben auf diesem Gerät.',
     'Use the same email address as your PublishProof purchase to unlock sync.': 'Verwenden Sie dieselbe E-Mail-Adresse wie beim PublishProof-Kauf, um die Synchronisierung freizuschalten.',
     'Account services are temporarily unavailable. Local records still work.': 'Die Kontodienste sind vorübergehend nicht verfügbar. Lokale Datensätze funktionieren weiterhin.',
-    'Opening Google sign-in…': 'Google-Anmeldung wird geöffnet…', 'Google sign-in could not be started.': 'Die Google-Anmeldung konnte nicht gestartet werden.',
+    'Opening secure sign-in…': 'Sichere Anmeldung wird geöffnet…', 'Secure sign-in could not be opened.': 'Die sichere Anmeldung konnte nicht geöffnet werden.',
     'Cloud sync is off. Existing cloud records are retained until you delete the account data.': 'Cloud-Synchronisierung ist aus. Vorhandene Cloud-Datensätze bleiben erhalten, bis Sie die Kontodaten löschen.',
     'The record is safe locally, but cloud sync will retry when you press “Sync now”.': 'Der Datensatz ist lokal sicher. Die Cloud-Synchronisierung versucht es erneut, wenn Sie „Jetzt synchronisieren“ drücken.',
     'The local record was deleted, but the cloud deletion still needs to synchronise.': 'Der lokale Datensatz wurde gelöscht, die Löschung in der Cloud muss jedoch noch synchronisiert werden.'
