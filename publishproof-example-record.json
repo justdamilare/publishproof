@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "exportedAt": "2026-09-06T12:00:00.000Z",
+  "records": [
+    {
+      "id": "PP-EXAMPLE",
+      "createdAt": "2026-08-31T10:30:00.000Z",
+      "client": "Northstar Coffee",
+      "campaign": "Autumn product launch",
+      "title": "Launch film — 30s cut",
+      "channel": "Instagram",
+      "publicationDate": "2026-09-12",
+      "contentType": "video",
+      "aiUse": "generated",
+      "aiTool": "Adobe Firefly",
+      "aiVersion": "Image 4",
+      "realistic": true,
+      "couldMislead": true,
+      "humanReviewed": true,
+      "editorialResponsibility": true,
+      "machineMark": true,
+      "visibleLabel": true,
+      "reviewer": "Creative Director",
+      "reviewDate": "2026-08-30",
+      "labelText": "Selected scenes in this film were generated using AI.",
+      "labelPlacement": "On-screen at first exposure and in caption",
+      "owner": "Account Lead",
+      "notes": "Fictional example. Product appearance was checked against approved photography; AI was used for the surrounding environment only.",
+      "fileName": "northstar-launch-final.mp4",
+      "fileHash": "9f7a8f3e11d1d618f3bc5b669927f7e20ab23e55444109a1324bc29fe4aac21d"
+    }
+  ]
+}
